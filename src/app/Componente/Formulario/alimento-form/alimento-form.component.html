@@ -1,0 +1,107 @@
+<div class="container mt-4">
+    <h3 class="mb-3">Listado de Alimentos</h3>
+  
+    <!-- Filtros de búsqueda -->
+    <div class="d-flex justify-content-between mb-3">
+      <div class="input-group w-50">
+        <input type="text" class="form-control" placeholder="Buscar por Empresa" [(ngModel)]="searchEmpresa" />
+        <button class="btn btn-outline-secondary" type="button" (click)="buscarPorEmpresa()">Buscar</button>
+      </div>
+      <div class="input-group w-50">
+        <input type="text" class="form-control" placeholder="Buscar por Tipo" [(ngModel)]="searchTipo" />
+        <button class="btn btn-outline-secondary" type="button" (click)="buscarPorTipo()">Buscar</button>
+      </div>
+    </div>
+  
+    <!-- Botón Agregar -->
+    <div class="text-end mb-3">
+      <button class="btn btn-success" (click)="abrirModalAgregar()">Agregar Alimento</button>
+    </div>
+  
+    <!-- Tabla de alimentos -->
+    <table class="table table-bordered table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Unidad</th>
+          <th>Precio/Unidad</th>
+          <th>Precio Total</th>
+          <th>Fecha Ingreso</th>
+          <th>Proveedor</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alimento of alimentos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ alimento.nombre }}</td>
+          <td>{{ alimento.tipo }}</td>
+          <td>{{ alimento.cantidad }}</td>
+          <td>{{ alimento.unidadMedida }}</td>
+          <td>{{ alimento.precioPorUnidad | currency:'PEN':'symbol':'1.2-2' }}</td>
+          <td>{{ alimento.precioTotal | currency:'PEN':'symbol':'1.2-2' }}</td>
+          <td>{{ alimento.fechaIngreso | date:'dd/MM/yyyy' }}</td>
+          <td>{{ alimento.proveedorEmpresa || 'Sin proveedor' }}</td>
+          <td>{{ alimento.observaciones }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+
+    <!-- Modal para agregar alimento -->
+  <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarLabel">Agregar Nuevo Alimento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="agregarAlimento()">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" [(ngModel)]="nuevoAlimento.nombre" name="nombre" required />
+            </div>
+            <div class="mb-3">
+              <label for="tipo" class="form-label">Tipo</label>
+              <input type="text" class="form-control" id="tipo" [(ngModel)]="nuevoAlimento.tipo" name="tipo" required />
+            </div>
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad</label>
+              <input type="number" class="form-control" id="cantidad" [(ngModel)]="nuevoAlimento.cantidad" name="cantidad" required />
+            </div>
+            <div class="mb-3">
+              <label for="unidadMedida" class="form-label">Unidad de Medida</label>
+              <select class="form-control" id="unidadMedida" [(ngModel)]="nuevoAlimento.unidadMedida" name="unidadMedida" required>
+                <option value="kg">Kilogramo (kg)</option>
+                <option value="tonelada">Tonelada (ton)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="precioPorUnidad" class="form-label">Precio por Unidad</label>
+              <input type="number" class="form-control" id="precioPorUnidad" [(ngModel)]="nuevoAlimento.precioPorUnidad" name="precioPorUnidad" required />
+            </div>
+            <div class="mb-3">
+              <label for="observaciones" class="form-label">Observaciones</label>
+              <input type="text" class="form-control" id="observaciones" [(ngModel)]="nuevoAlimento.observaciones" name="observaciones" />
+            </div>
+            <div class="mb-3">
+              <label for="proveedor" class="form-label">Proveedor</label>
+              <select id="proveedor" class="form-control" [(ngModel)]="nuevoAlimento.proveedor.id" name="proveedor" required>
+                <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+                  {{ proveedor.empresa }} - {{ proveedor.representante }}
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  

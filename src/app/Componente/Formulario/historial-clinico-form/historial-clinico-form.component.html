@@ -1,0 +1,41 @@
+<div class="container mt-3">
+  <h2 class="text-center text-primary">Historial Clínico</h2>
+
+  <!-- Botón para abrir el modal -->
+  <div class="text-end">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalHistorial" onclick="showAlert()">
+        Agregar Ganado
+    </button>
+</div>
+
+  <!-- Tabla de Listado y CRUD -->
+  <div>
+      <table class="table table-striped table-hover table-sm shadow-sm">
+          <thead class="table-dark">
+              <tr>
+                  <th>Código Ganado</th>
+                  <th>Fecha</th>
+                  <th>Diagnóstico</th>
+                  <th>Tratamiento</th>
+                  <th>Acciones</th> <!-- Columna de acciones -->
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>G001</td>
+                  <td>2025-03-10</td>
+                  <td>Fiebre</td>
+                  <td>Antibióticos</td>
+                  <td>
+                      <!-- Botón para abrir el modal en modo edición -->
+                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalHistorial">✏️</button>
+                      <button type="button" class="btn btn-danger btn-sm">🗑️</button>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <!-- Incluir el componente del modal -->
+  <app-historial-clinico-modal></app-historial-clinico-modal>
+</div>

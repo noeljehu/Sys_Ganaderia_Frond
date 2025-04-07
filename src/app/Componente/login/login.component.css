@@ -1,0 +1,144 @@
+/* Reset básico y estilos globales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Contenedor principal: dos secciones de igual ancho */
+.pantalla-dividida {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sección izquierda: imagen de fondo */
+.izquierdo {
+  flex: 1;
+  position: relative; /* Para posicionar el overlay */
+  overflow: hidden;
+}
+
+.izquierdo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Para que la imagen cubra todo el contenedor */
+}
+
+/* Overlay para superponer texto sobre la imagen */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+/* Estilo para el título y la descripción */
+.finca {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.descrip {
+  font-size: 1.2rem;
+}
+
+/* Sección derecha: formulario de login */
+.derecho {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-wrapper h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #218838;
+}
+
+.error {
+  margin-top: 15px;
+  text-align: center;
+  color: #d9534f;
+}
+
+.register-link {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

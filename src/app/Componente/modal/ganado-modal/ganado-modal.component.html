@@ -1,0 +1,51 @@
+<div class="modal fade" id="modalGanado" tabindex="-1" aria-labelledby="modalGanadoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="modalGanadoLabel">Gestión de Ganado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Código Único:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese código único">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Corral:</label>
+                        <select class="form-select">
+                            <option value="">Seleccione un corral</option>
+                            <option value="1">Corral 1</option>
+                            <option value="2">Corral 2</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Peso (kg):</label>
+                        <input type="number" class="form-control" placeholder="Ingrese peso">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Raza:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese raza">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Estado de Salud:</label>
+                        <select class="form-select">
+                            <option value="">Seleccione estado</option>
+                            <option value="Sano">Sano</option>
+                            <option value="Enfermo">Enfermo</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

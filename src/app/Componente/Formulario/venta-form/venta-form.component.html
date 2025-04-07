@@ -1,0 +1,82 @@
+<div class="ventas-container container py-3">
+  <h2 class="text-center text-primary mb-3">Registro de Venta</h2>
+
+  <form id="formVenta">
+    <div class="row">
+      <!-- Columna para los Inputs -->
+      <div class="col-lg-6 mb-3">
+        <div class="mb-2">
+          <label for="dniCliente" class="form-label">DNI Cliente:</label>
+          <input type="number" class="form-control form-control-sm w-75" id="dniCliente" placeholder="Ingrese DNI del Cliente" required>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-2 buscar-cliente float-start">Buscar Cliente</button>
+
+        <div id="clienteInfo" class="d-none">
+          <p><strong>Cliente Encontrado:</strong> <span id="nombreCliente"></span></p>
+        </div>
+
+        <div class="mb-2">
+          <label for="fecha" class="form-label">Fecha de Venta:</label>
+          <input type="date" class="form-control form-control-sm w-75" id="fecha" required>
+        </div>
+
+        <h3 class="mt-3 fs-6">Buscar Ganado</h3>
+        <div class="mb-2">
+          <label for="idGanado" class="form-label">ID del Ganado:</label>
+          <input type="number" class="form-control form-control-sm w-75" id="idGanado" placeholder="Ingrese ID del Ganado">
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-2 buscar float-start">Buscar</button>
+
+        <div class="detalle-ganado">
+          <p><strong>Código Único:</strong> <span id="codigoGanado"></span></p>
+          <p><strong>Peso:</strong> <span id="pesoGanado"></span> kg</p>
+        </div>
+
+        <h3 class="mt-3 fs-6">Agregar Ganado a la Venta</h3>
+        <div class="mb-2">
+          <label for="peso1" class="form-label">Peso Parte 1 (Kg):</label>
+          <input type="number" class="form-control form-control-sm w-75" id="peso1" placeholder="Peso de la primera parte" required>
+        </div>
+
+        <div class="mb-2">
+          <label for="peso2" class="form-label">Peso Parte 2 (Kg):</label>
+          <input type="number" class="form-control form-control-sm w-75" id="peso2" placeholder="Peso de la segunda parte" required>
+        </div>
+
+        <div class="mb-2">
+          <label for="precio" class="form-label">Precio x Kilo:</label>
+          <input type="number" class="form-control form-control-sm w-75" id="precio" placeholder="Precio por kilo" required>
+        </div>
+
+        <button type="button" class="btn btn-success btn-sm w-100 mb-3 agregar">REGISTRAR</button>
+      </div>
+
+      <!-- Columna para la Tabla -->
+      <div class="col-lg-6 mb-3">
+        <h3 class="mt-3 fs-6">Ganados Agregados</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>ID Ganado</th>
+                <th>Peso Parte 1 (Kg)</th>
+                <th>Peso Parte 2 (Kg)</th>
+                <th>Total Peso (Kg)</th>
+                <th>Precio x Kg</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tablaGanados">
+              <!-- Aquí se llenarán los datos con JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Total: <span id="totalVenta">0.00</span></h3>
+
+        <button type="submit" class="btn btn-primary btn-sm w-100 mt-3 registrarVenta float-end">Registrar Venta</button>
+      </div>
+    </div>
+  </form>
+</div>

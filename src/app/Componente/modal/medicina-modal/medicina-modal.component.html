@@ -1,0 +1,53 @@
+<div class="modal fade" id="modalMedicina" tabindex="-1" aria-labelledby="modalMedicinaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="modalMedicinaLabel">Gestión de Medicina</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-2">
+                        <label class="form-label">Nombre:</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Ingrese nombre">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Tipo:</label>
+                        <select class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <option value="Antibiótico">Antibiótico</option>
+                            <option value="Vitaminas">Vitaminas</option>
+                            <option value="Antiinflamatorio">Antiinflamatorio</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Descripción:</label>
+                        <textarea class="form-control form-control-sm"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Dosis Recomendada:</label>
+                        <input type="text" class="form-control form-control-sm">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Cantidad:</label>
+                        <input type="number" class="form-control form-control-sm" step="any">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Precio:</label>
+                        <input type="number" class="form-control form-control-sm" step="any">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de Vencimiento:</label>
+                        <input type="date" class="form-control form-control-sm">
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="button" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

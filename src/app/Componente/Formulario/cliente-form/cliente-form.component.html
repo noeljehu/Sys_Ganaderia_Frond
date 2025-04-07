@@ -1,0 +1,53 @@
+<div class="container mt-5">
+    <h2 class="text-center text-primary">Gestión de Cliente</h2>
+
+    <!-- Campo de búsqueda -->
+    <div class="mb-3 d-flex">
+        <input type="text" class="form-control me-2" placeholder="Buscar cliente por nombre o DNI">
+        <button class="btn btn-primary">Buscar</button>
+    </div>
+
+    <div class="text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCliente" onclick="showAlert()">
+            Agregar Cliente
+        </button>
+    </div>
+
+    <!-- Tabla de Clientes Registrados -->
+    <table class="table table-striped table-hover shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>cod client 8 caracteres</th>
+                <th>Nombre</th>
+                <th>ruc</th>
+                <th>Apellido</th>
+                <th>tipo de documento</th>
+                <th>Teléfono</th>
+                <th>Correo Electrónico</th>
+                <th>Dirección</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>12345678</td>
+                <td>Juan</td>
+                <td>Pérez</td>
+                <td>12345678</td>
+                <td>987654321</td>
+                <td>juan.perezemail.com</td>
+                <td>Calle Ficticia 123</td>
+                <td>2025-03-10</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCliente">✏️</button>
+                    <button class="btn btn-outline-danger btn-sm">🗑️</button>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Incluir el componente del modal -->
+    <app-cliente-modal></app-cliente-modal>
+</div>

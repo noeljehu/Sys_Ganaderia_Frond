@@ -1,0 +1,59 @@
+<div class="modal fade" id="modalregistroalimento" tabindex="-1" aria-labelledby="modalregistroalimentoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalregistroalimentoLabel">Editar Registro de Alimento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario -->
+          <form>
+            <!-- Selección de Corral -->
+            <div class="mb-2">
+              <label for="edit-id-corral" class="form-label">Seleccionar Corral:</label>
+              <select id="edit-id-corral" class="form-select form-select-sm">
+                <option value="">Seleccione un corral...</option>
+                <option value="1">Corral 1</option>
+                <option value="2">Corral 2</option>
+                <option value="3">Corral 3</option>
+              </select>
+            </div>
+  
+            <!-- Selección de Alimento -->
+            <div class="mb-2">
+              <label for="edit-id-alimento" class="form-label">Seleccionar Alimento:</label>
+              <select id="edit-id-alimento" class="form-select form-select-sm">
+                <option value="">Seleccione un alimento...</option>
+                <option value="1">Heno</option>
+                <option value="2">Concentrado</option>
+                <option value="3">Forraje</option>
+              </select>
+            </div>
+  
+            <!-- Cantidad -->
+            <div class="mb-2">
+              <label for="edit-cantidad" class="form-label">Cantidad:</label>
+              <input type="number" id="edit-cantidad" class="form-control form-control-sm">
+            </div>
+  
+            <!-- Fecha de Suministro -->
+            <div class="mb-2">
+              <label for="edit-fecha" class="form-label">Fecha de Suministro:</label>
+              <input type="date" id="edit-fecha" class="form-control form-control-sm">
+            </div>
+  
+            <!-- Observaciones -->
+            <div class="mb-2">
+              <label for="edit-observaciones" class="form-label">Observaciones:</label>
+              <textarea id="edit-observaciones" class="form-control form-control-sm"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success btn-sm">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

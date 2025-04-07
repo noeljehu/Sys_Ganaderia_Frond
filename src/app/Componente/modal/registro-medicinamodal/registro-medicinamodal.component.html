@@ -1,0 +1,51 @@
+<div class="modal fade" id="modalRegistroMedicina" tabindex="-1" aria-labelledby="modalRegistroMedicinaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRegistroMedicinaLabel">Registrar Medicina</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario -->
+                <form>
+                    <div class="mb-2">
+                        <label for="edit-ganado" class="form-label">Ganado:</label>
+                        <select id="edit-ganado" class="form-select form-select-sm">
+                            <option value="1">Ganado 1</option>
+                            <option value="2">Ganado 2</option>
+                            <option value="3">Ganado 3</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit-medicina" class="form-label">Medicina:</label>
+                        <select id="edit-medicina" class="form-select form-select-sm">
+                            <option value="1">Medicina A</option>
+                            <option value="2">Medicina B</option>
+                            <option value="3">Medicina C</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit-descripcion" class="form-label">Descripción de la Medicina:</label>
+                        <input type="text" id="edit-descripcion" class="form-control form-control-sm" placeholder="Ej. Antibiótico para infecciones">
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit-dosis" class="form-label">Dosis:</label>
+                        <input type="number" id="edit-dosis" class="form-control form-control-sm" step="any">
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit-fecha" class="form-label">Fecha de Administración:</label>
+                        <input type="date" id="edit-fecha" class="form-control form-control-sm">
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit-observaciones" class="form-label">Observaciones:</label>
+                        <textarea id="edit-observaciones" class="form-control form-control-sm"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success btn-sm">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

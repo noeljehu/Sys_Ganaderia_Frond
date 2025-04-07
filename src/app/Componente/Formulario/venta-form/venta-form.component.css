@@ -1,0 +1,14 @@
+/* Ajustar el tamaño del contenedor */
+.ventas-container {
+    min-height: 100vh;
+  }
+  
+  /* Asegúrate de que el formulario ocupe suficiente espacio */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+ 
+  
+  

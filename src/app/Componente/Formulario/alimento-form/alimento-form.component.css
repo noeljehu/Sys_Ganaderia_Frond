@@ -1,0 +1,227 @@
+/* Fondo general más suave */
+body {
+    background-color: #f4f7fa; /* Fondo más claro y suave */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Ajuste en el container para mejor espaciado */
+.container {
+    margin-top: 60px;
+    max-width: 950px; /* Aumenté el tamaño para más espacio */
+    padding: 15px;
+}
+
+/* Título principal más grande y atractivo */
+h2 {
+    color: #007bff;
+    font-size: 3rem; /* Haciendo el título más grande */
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px; /* Aumenté el margen inferior para mejor separación */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Mejorar la apariencia de los botones */
+button {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border-radius: 30px; /* Borde más redondeado */
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Botones dentro del formulario más grandes y con borde redondeado */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.3);
+    transform: translateY(-3px); /* Efecto de movimiento */
+}
+
+/* Colores de botones más intensos y con transiciones */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+/* Efecto de hover en los botones */
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Estilo para la tabla */
+.table {
+    border-radius: 10px;
+    margin-top: 30px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* Sombra para la tabla */
+    border-collapse: collapse;
+}
+
+/* Fila de la tabla con color alternado */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+/* Cabecera de la tabla con fondo oscuro y texto claro */
+.table-dark {
+    background-color: #343a40;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Mejorar visibilidad de las acciones en la tabla */
+.table td button {
+    font-size: 1.1rem;
+    padding: 8px 15px;
+    border-radius: 8px; /* Borde más redondeado */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Botones de acción con colores más claros */
+.btn-outline-primary, .btn-outline-danger {
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Efectos de hover en los botones de acción */
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Estilo para inputs y campos de texto */
+.form-control {
+    font-size: 1rem;
+    padding: 12px 15px;
+    border-radius: 10px; /* Borde redondeado */
+    border: 1px solid #ddd;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Espaciado y alineación correcta en la tabla */
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 15px 20px; /* Añadí más padding para mayor espacio */
+}
+
+/* Ajustes para la fila de botones de acción */
+.table td button {
+    font-size: 1.1rem;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Mejorar espaciado en la barra de búsqueda */
+#searchInput {
+    font-size: 1.1rem;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 80%; /* Hace que el input ocupe más espacio */
+}
+
+#searchInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Ajustar el botón de búsqueda */
+button.ms-2 {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+button.ms-2:hover {
+    background-color: #0056b3;
+}
+/* Contenedor para la barra de búsqueda */
+.mt-3.d-flex {
+    justify-content: space-between; /* Esto asegura que haya espacio entre los botones */
+    align-items: center;
+}
+
+/* Botón de búsqueda */
+button.ms-2 {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Botón de búsqueda al hacer hover */
+button.ms-2:hover {
+    background-color: #0056b3;
+}
+
+/* Espaciado para el botón de "Agregar Alimento" */
+.text-end {
+    margin-top: 20px; /* Aumenté el margen superior para separar el botón de "Agregar" de la tabla */
+}
+
+
+/* Mejorar la visualización en dispositivos pequeños */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .table th, .table td {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    #searchInput {
+        width: 70%; /* Reduce el ancho del campo de búsqueda en pantallas pequeñas */
+    }
+}

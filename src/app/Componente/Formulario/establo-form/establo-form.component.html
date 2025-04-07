@@ -1,0 +1,239 @@
+<!-- Contenedor principal -->
+<div class="container mt-4">
+  <!-- Botón para abrir el modal de establo -->
+  <div class="text-center mt-4">
+    <button
+      class="btn btn-warning btn-lg shadow-lg"
+      data-bs-toggle="modal"
+      data-bs-target="#modalEstablo"
+    >
+      ➕ Agregar Establo
+    </button>
+  </div>
+
+  <!-- Modal para agregar establo -->
+  <div class="modal fade" id="modalEstablo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border border-warning">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title fw-bold">🏠 Agregar Nuevo Establo</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form (submit)="agregarEstablo(); $event.preventDefault()">
+            <div class="mb-3">
+              <label class="form-label fw-bold">📛 Nombre:</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="nuevoEstablo.nombre"
+                name="nombre"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">📍 Ubicación:</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="nuevoEstablo.ubicacion"
+                name="ubicacion"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">🐄 Capacidad:</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="nuevoEstablo.capacidad"
+                name="capacidad"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">📏 Área (m²):</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="nuevoEstablo.area"
+                name="area"
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                ❌ Cancelar
+              </button>
+              <button type="submit" class="btn btn-warning">✅ Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Cierre del modal -->
+
+  <!-- Sección de establos -->
+  <h2 class="text-center fw-bold text-dark mt-5">🏡 Lista de Establos</h2>
+
+  <div class="row mt-4">
+    <div *ngFor="let establo of establos" class="col-md-4 mb-4">
+      <div class="card border border-warning shadow-lg">
+        <div class="card-body bg-light">
+          <h5 class="card-title fw-bold text-warning text-center">
+            🏡 {{ establo.nombre }}
+          </h5>
+          <p class="card-text text-center">
+            📍 <strong>Ubicación:</strong> {{ establo.ubicacion }} <br />
+            🐄 <strong>Capacidad:</strong> {{ establo.capacidad }} corrales
+            <br />
+            📏 <strong>Área:</strong> {{ establo.area }} m²
+          </p>
+          <div class="text-center">
+            <button
+              class="btn btn-outline-warning btn-sm"
+              (click)="abrirModalCorrales(establo)"
+            >
+              🏠 Ver Corrales
+            </button>
+            <button
+              class="btn btn-outline-danger btn-sm"
+              (click)="eliminarEstablo(establo.id)"
+            >
+              🗑 Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Corrales -->
+  <div class="modal fade" id="modalCorrales" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border border-success">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title fw-bold">
+            🏠 Corrales de {{ establoSeleccionado?.nombre }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form (submit)="agregarCorral(); $event.preventDefault()">
+            <div class="mb-3">
+              <label class="form-label fw-bold">🏠 Nombre del Corral:</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="nuevoCorral.nombre"
+                name="nombre"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">🐄 Capacidad:</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="nuevoCorral.capacidad"
+                name="capacidad"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-success w-100">
+              ✅ Agregar Corral
+            </button>
+          </form>
+
+          <hr />
+
+          <h6 class="fw-bold text-center">Lista de Corrales</h6>
+          <ul *ngIf="corrales.length > 0; else noCorrales" class="list-group">
+            <li
+              *ngFor="let corral of corrales"
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              🏠 {{ corral.nombre }} - Capacidad: {{ corral.capacidad }} - 🐄
+              CANTIDAD:{{ corral.cantidadAnimales ?? 0 }}
+
+              <button
+                class="btn btn-info btn-sm me-2"
+                (click)="abrirModalCodigos(corral)"
+              >
+                📋 Ver Ganado
+              </button>
+              <button
+                class="btn btn-danger btn-sm"
+                *ngIf="corral.id !== undefined"
+                (click)="eliminarCorral(corral.id!)"
+              >
+                🗑
+              </button>
+            </li>
+          </ul>
+
+          <ng-template #noCorrales>
+            <p class="text-center text-muted">
+              No hay corrales en este establo.
+            </p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Ver Códigos de los Animales -->
+  <div class="modal fade" id="modalCodigos" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border border-primary">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold">
+            📋 Lista de ganados - {{ corralSeleccionado?.nombre }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <h6 class="fw-bold text-center">Lista de Códigos Únicos</h6>
+          <div
+            *ngIf="corralSeleccionado?.codigoUnicos; else noCodigos"
+            class="row g-3"
+          >
+            <div
+              class="col-12 col-md-6"
+              *ngFor="let codigo of corralSeleccionado?.codigoUnicos"
+            >
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Código: {{ codigo }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noCodigos>
+            <p class="text-center text-muted">
+              No hay ganado registrado en este corral.
+            </p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

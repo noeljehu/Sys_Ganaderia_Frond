@@ -1,0 +1,85 @@
+<div class="container mt-4 position-relative" style="min-height: 80vh;">
+  <h2 class="mb-4 text-center">Gestión de Usuarios</h2>
+
+  <!-- Acciones -->
+  <div class="d-flex flex-wrap align-items-center justify-content-start gap-4 mb-4">
+    <!-- Botón Registrar Usuario -->
+    <button class="btn btn-primary" (click)="abrirModalRegistro()">
+      <i class="bi bi-plus-circle me-2"></i> Registrar Usuario
+    </button>
+
+    <!-- Campo de búsqueda con botón Buscar -->
+    <div class="d-flex align-items-center gap-2">
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="filtroNombre" 
+        placeholder="Buscar por nombre" 
+        style="max-width: 300px;"
+      />
+      <button class="btn btn-secondary" (click)="buscarPorNombre()" [disabled]="!filtroNombre.trim()">
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+
+    <!-- Botón Ver Roles -->
+    <button class="btn btn-info text-white" (click)="openRolesModal()">
+      <i class="bi bi-people"></i> Ver Roles
+    </button>
+  </div>
+
+  <!-- Tabla con altura mínima -->
+  <div class="table-responsive" style="min-height: 300px;">
+    <table class="table table-bordered table-hover" *ngIf="usuarios.length > 0; else noData">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Fecha de Registro</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario?.nombre }}</td>
+          <td>{{ usuario?.correo }}</td>
+          <td>{{ usuario?.rol?.nombre }}</td>
+          <td>{{ usuario?.telefono }}</td>
+          <td>{{ usuario?.direccion }}</td>
+          <td>{{ usuario?.fechaRegistro | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="badge" [ngClass]="usuario?.estado ? 'bg-success' : 'bg-secondary'">
+              {{ usuario?.estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="text-nowrap">
+            <button class="btn btn-sm btn-warning me-2" (click)="editarUsuario(usuario)">
+              <i class="bi bi-pencil-square"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarUsuario(usuario.id)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mensaje cuando no hay datos -->
+  <ng-template #noData>
+    <div class="alert alert-info text-center">
+      No hay usuarios registrados.
+    </div>
+  </ng-template>
+
+  <!-- Paginación siempre fija abajo -->
+  <!-- Paginación -->
+  <div class="text-center mt-1" *ngIf="totalPages > 1">
+    <button class="btn btn-secondary me-2" (click)="cambiarPagina(-1)" [disabled]="page === 0">Anterior</button>
+    <button class="btn btn-secondary" (click)="cambiarPagina(1)" [disabled]="page + 1 === totalPages">Siguiente</button>
+</div>
+</div>
