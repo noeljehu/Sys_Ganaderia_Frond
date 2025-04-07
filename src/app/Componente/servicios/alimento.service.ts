@@ -1,50 +1,59 @@
-// src/app/services/alimento.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Alimento } from '../Modelo/Alimento'; // Asegúrate de que la ruta sea correcta
+import { Alimento } from '../Modelo/Alimento';
 
 @Injectable({
   providedIn: 'root'
 })
-export class alimentoService {
+export class AlimentoService {
 
-  private baseUrl: string = 'http://localhost:9000/api/alimentos'; // Cambia la URL según sea necesario
+  private apiUrl = `http://localhost:9000/aa`; // ← corregido
 
   constructor(private http: HttpClient) { }
 
-  // Crear un nuevo alimento
-  crearAlimento(alimento: Alimento): Observable<Alimento> {
-    return this.http.post<Alimento>(this.baseUrl, alimento);
-  }
-
   // Obtener todos los alimentos
-  obtenerTodosLosAlimentos(): Observable<Alimento[]> {
-    return this.http.get<Alimento[]>(this.baseUrl);
+  getAlimentos(): Observable<Alimento[]> {
+    return this.http.get<Alimento[]>(this.apiUrl);
   }
 
-  // Obtener alimento por ID
-  obtenerAlimentoPorId(id: number): Observable<Alimento> {
-    return this.http.get<Alimento>(`${this.baseUrl}/${id}`);
+  // Obtener un alimento por ID
+  getAlimentoById(id: number): Observable<Alimento> {
+    return this.http.get<Alimento>(`${this.apiUrl}/${id}`);
   }
 
-  // Actualizar un alimento por ID
+  // Guardar un nuevo alimento
+  guardarAlimento(alimento: Alimento, cantidad: number, unidadMedida: string): Observable<Alimento> {
+    const params = new HttpParams()
+      .set('cantidad', cantidad.toString())
+      .set('unidadMedida', unidadMedida);
+    return this.http.post<Alimento>(this.apiUrl, alimento, { params });
+  }
+
+  // Actualizar un alimento
   actualizarAlimento(id: number, alimento: Alimento): Observable<Alimento> {
-    return this.http.put<Alimento>(`${this.baseUrl}/${id}`, alimento);
+    return this.http.put<Alimento>(`${this.apiUrl}/${id}`, alimento);
   }
 
-  // Eliminar un alimento por ID
+  // Eliminar un alimento
   eliminarAlimento(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Obtener alimentos por proveedor (empresa)
-  obtenerAlimentosPorProveedor(empresa: string): Observable<Alimento[]> {
-    return this.http.get<Alimento[]>(`${this.baseUrl}/proveedor/${empresa}`);
+  // Agregar stock por nombre
+  agregarStockPorNombre(nombre: string, cantidad: number, unidadMedida: string): Observable<Alimento> {
+    const params = new HttpParams()
+      .set('nombre', nombre)
+      .set('cantidad', cantidad.toString())
+      .set('unidadMedida', unidadMedida);
+    return this.http.patch<Alimento>(`${this.apiUrl}/agregar-stock`, {}, { params });
   }
 
-  // Obtener alimentos por tipo
-  obtenerAlimentosPorTipo(tipo: string): Observable<Alimento[]> {
-    return this.http.get<Alimento[]>(`${this.baseUrl}/tipo/${tipo}`);
+  // Actualizar stock por ID
+  actualizarStockPorId(id: number, cantidad: number, unidadMedida: string): Observable<Alimento> {
+    const params = new HttpParams()
+      .set('cantidad', cantidad.toString())
+      .set('unidadMedida', unidadMedida);
+    return this.http.patch<Alimento>(`${this.apiUrl}/${id}/stock`, {}, { params });
   }
 }

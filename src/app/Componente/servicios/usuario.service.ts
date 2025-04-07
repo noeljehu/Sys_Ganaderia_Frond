@@ -1,40 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Usuario } from '../Modelo/Usuario'; // Asegúrate de que la ruta sea correcta
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:9000/usuarios';
+  private apiUrl = 'http://localhost:9000/usuarios'; // Cambia según la URL de tu API
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken');
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  // Registra un nuevo usuario
+  registrarUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}/register`, usuario);
   }
 
-  getUsuarios(page: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?page=${page}`);
+  // Lista todos los usuarios
+  listarUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.apiUrl);
   }
 
-  buscarPorNombre(nombre: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/buscar?nombre=${nombre}`);
+  // Busca un usuario por su ID
+  buscarUsuarioPorId(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
 
-  registrarUsuario(usuario: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, usuario, { headers: this.getHeaders() });
+  // Busca usuarios por nombre
+  buscarPorNombre(nombre: string): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar?nombre=${nombre}`);
   }
 
-  editarUsuario(id: number, usuario: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, usuario, { headers: this.getHeaders() });
-  }
-  getRoles(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:9000/api/roles');
+  // Actualiza un usuario
+  actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario);
   }
 
-  eliminarUsuario(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  // Elimina un usuario por su ID
+  eliminarUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

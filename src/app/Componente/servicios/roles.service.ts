@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Rol } from '../Modelo/Usuario';  // Correcta importación del modelo Rol desde Usuario.ts
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +11,23 @@ export class RolService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(token: string | null): HttpHeaders {
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  // Obtener todos los roles
+  obtenerRoles(): Observable<Rol[]> {
+    return this.http.get<Rol[]>(this.apiUrl);
   }
 
-  obtenerRoles(token: string | null): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, { headers: this.getHeaders(token) });
+  // Crear un nuevo rol
+  crearRol(rol: Rol): Observable<Rol> {
+    return this.http.post<Rol>(this.apiUrl, rol);
   }
 
-  crearRol(rol: any, token: string | null): Observable<any> {
-    return this.http.post<any>(this.apiUrl, rol, { headers: this.getHeaders(token) });
+  // Editar un rol existente
+  editarRol(id: number, rol: Rol): Observable<Rol> {
+    return this.http.put<Rol>(`${this.apiUrl}/${id}`, rol);
   }
 
-  editarRol(id: number, rol: any, token: string | null): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, rol, { headers: this.getHeaders(token) });
-  }
-
-  eliminarRol(id: number, token: string | null): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders(token) });
+  // Eliminar un rol
+  eliminarRol(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

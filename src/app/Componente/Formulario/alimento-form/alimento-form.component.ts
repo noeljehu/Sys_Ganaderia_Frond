@@ -1,137 +1,133 @@
 import { Component, OnInit } from '@angular/core';
-import { alimentoService } from '../../servicios/alimento.service';
-import { ProveedorService } from '../../servicios/proveedor.service';
+import { AlimentoService } from '../../servicios/alimento.service';
 import { Alimento } from '../../Modelo/Alimento';
-import { Proveedor } from '../../Modelo/proveedor.model';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-declare var bootstrap: any;
+import { ProveedorService } from '../../servicios/proveedor.service';
 
 @Component({
-  selector: 'app-alimento-form',
+  selector: 'app-alimento',
   standalone: true,
-  imports: [FormsModule, CommonModule],
-  templateUrl: './alimento-form.component.html',
-  styleUrls: ['./alimento-form.component.css']
+  imports: [ReactiveFormsModule, CommonModule],
+  templateUrl: './alimento-form.component.html'
 })
-export class AlimentoFormComponent implements OnInit {
-  searchEmpresa: string = '';
-  searchTipo: string = '';
+export class AlimentoComponent implements OnInit {
   alimentos: Alimento[] = [];
-  alimentosFiltrados: Alimento[] = this.alimentos;
-  proveedores: Proveedor[] = [];
-  totalPages: number = 3;
-  page: number = 1;
-  size: number = 100;
-
-  nuevoAlimento: Alimento = {
-    nombre: '',
-    tipo: '',
-    cantidad: 0,
-    unidadMedida: '',
-    precioPorUnidad: 0,
-    precioTotal: 0,
-    fechaIngreso: new Date().toISOString().split('T')[0],  // Fecha actual
-    observaciones: '',
-    proveedor: {
-      id: 1,
-      ruc: '',
-      empresa: '',
-      representante: '',
-      telefono: '',
-      correo: '',
-      estado: false
-    },  // Solo el id del proveedor
-    proveedorEmpresa: ''
-  };
+  alimentoForm!: FormGroup;
+  currentAlimento: Alimento | null = null;
+proveedores: any;
 
   constructor(
-    private alimentoService: alimentoService,
-    private proveedorService: ProveedorService
+    private alimentoService: AlimentoService,
+    private proveedorService: ProveedorService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.cargarAlimentos();
-   
+    this.initForm();
+    this.obtenerAlimentos();
+    this.obtenerProveedores();
   }
 
+  obtenerProveedores(): void {
+    this.proveedorService.listarProveedores().subscribe((data: any) => {
+      this.proveedores = data;
+      console.log(this.proveedores);
+    });
+  }
+
+  initForm(): void {
+    this.alimentoForm = this.fb.group({
+      codigoAlimento: [''], // se generará automáticamente
+      nombre: ['', Validators.required],
+      tipo: ['', Validators.required],
+      cantidad: [0, [Validators.required, Validators.min(0.1)]],
+      unidadMedida: ['', Validators.required],
+      precioPorUnidad: [0, [Validators.required, Validators.min(0)]],
+      observaciones: [''],
+      proveedor: ['', Validators.required]
+    });
+  }
+
+  obtenerAlimentos(): void {
+    this.alimentoService.getAlimentos().subscribe(data => {
+      this.alimentos = data;
+    });
+  }
+
+  abrirModal(alimento: Alimento | null = null): void {
+    this.currentAlimento = alimento;
+  
+    if (alimento) {
+      // Si el alimento tiene proveedor, asignamos el nombre del proveedor
+      this.alimentoForm.patchValue({
+        ...alimento,
+        proveedor: alimento.proveedor || null  // Usamos directamente el nombre del proveedor
+      });
+    } else {
+      this.alimentoForm.reset({
+        cantidad: 0,
+        precioPorUnidad: 0,
+        proveedor: this.currentAlimento ? this.currentAlimento.proveedor : null  // Mantener el proveedor anterior si no se selecciona uno nuevo
+      });
+    }
+  
+    const modal = document.getElementById('alimentoModal');
+    if (modal) {
+      modal.classList.add('show');
+      modal.style.display = 'block';
+    }
+  }
+  
+  
+  
+  
+  
+  cerrarModal(): void {
+    const modal = document.getElementById('alimentoModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+    }
+  }
+
+  guardarAlimento(): void {
+    if (this.alimentoForm.invalid) {
+      this.alimentoForm.markAllAsTouched();
+      return;
+    }
+  
+    const formData = this.alimentoForm.value;
+  
+    // Si no se seleccionó un proveedor, mantenemos el proveedor anterior
+    if (!formData.proveedor && this.currentAlimento) {
+      formData.proveedor = this.currentAlimento.proveedor;
+    }
+  
+    if (this.currentAlimento) {
+      // Actualizar alimento
+      this.alimentoService.actualizarAlimento(this.currentAlimento.id, formData).subscribe(() => {
+        this.obtenerAlimentos();
+        this.cerrarModal();
+      });
+    } else {
+      // Guardar nuevo alimento
+      this.alimentoService
+        .guardarAlimento(formData, formData.cantidad, formData.unidadMedida)
+        .subscribe(() => {
+          this.obtenerAlimentos();
+          this.cerrarModal();
+        });
+    }
+  }
+  
   
 
-  // Métodos para búsqueda de empresa y tipo
-  buscarPorEmpresa() {
-    this.alimentosFiltrados = this.alimentos.filter(alimento =>
-      alimento.proveedorEmpresa?.toLowerCase().includes(this.searchEmpresa.toLowerCase())
-    );
-  }
-
-  buscarPorTipo() {
-    this.alimentosFiltrados = this.alimentos.filter(alimento =>
-      alimento.tipo?.toLowerCase().includes(this.searchTipo.toLowerCase())
-    );
-  }
-
-  // Método para abrir el modal de agregar alimento
-  abrirModalAgregar() {
-    const modal = new bootstrap.Modal(document.getElementById('modalAgregar')!);
-    modal.show();
-  }
-
-  // Método para cargar los alimentos
-  cargarAlimentos(): void {
-    this.alimentoService.obtenerTodosLosAlimentos().subscribe({
-      next: (data) => {
-        this.alimentos = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar alimentos:', err);
-      }
-    });
-  }
-
-  // Método para agregar un nuevo alimento
-  agregarAlimento(): void {
-    this.nuevoAlimento.precioTotal = this.nuevoAlimento.precioPorUnidad * this.nuevoAlimento.cantidad;
-
-    this.alimentoService.crearAlimento(this.nuevoAlimento).subscribe({
-      next: (data) => {
-        this.cargarAlimentos();  // Recargar la lista de alimentos después de agregar uno nuevo
-        this.limpiarFormulario(); // Limpiar el formulario
-        this.cerrarModal();  // Cerrar el modal
-      },
-      error: (err) => {
-        console.error('Error al agregar alimento:', err);
-      }
-    });
-  }
-
-  // Método para limpiar el formulario
-  limpiarFormulario(): void {
-    this.nuevoAlimento = {
-      nombre: '',
-      tipo: '',
-      cantidad: 0,
-      unidadMedida: '',
-      precioPorUnidad: 0,
-      precioTotal: 0,
-      fechaIngreso: new Date().toISOString().split('T')[0],
-      observaciones: '',
-      proveedor: {
-        id: 1,
-        ruc: '',
-        empresa: '',
-        representante: '',
-        telefono: '',
-        correo: '',
-        estado: false
-      }, // El proveedor siempre será inicializado con un id
-      proveedorEmpresa: ''
-    };
-  }
-
-  // Método para cerrar el modal
-  cerrarModal(): void {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregar')!);
-    modal?.hide();
+  eliminarAlimento(id: number): void {
+    if (confirm('¿Estás seguro de eliminar este alimento?')) {
+      this.alimentoService.eliminarAlimento(id).subscribe(() => {
+        this.obtenerAlimentos();
+      });
+    }
   }
 }

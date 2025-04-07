@@ -1,76 +1,90 @@
 <div class="container mt-4">
-    <h2>Lista de Proveedores</h2>
-  
-    <!-- Botón para abrir el modal de registro -->
-    <button class="btn btn-primary mb-3" (click)="abrirModalRegistro()">Registrar Proveedor</button>
-  
-    <!-- Tabla de proveedores -->
-    <table class="table table-striped">
-      <thead>
-        <tr>
-            
-          <th>ID</th>
-          <th>Empresa</th>
-          <th>Representante</th>
-          <th>Teléfono</th>
-          <th>Correo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let proveedor of proveedores">
-        <td> {{proveedor.id}}</td>
-          <td>{{proveedor.empresa}}</td>
-          <td>{{proveedor.representante}}</td>
-          <td>{{proveedor.telefono}}</td>
-          <td>{{proveedor.correo}}</td>
-          <td>
-            <button class="btn btn-secondary" (click)="abrirModalEditar(proveedor)">Editar</button>
-            <button class="btn btn-danger" (click)="eliminarProveedor(proveedor.id)">Eliminar</button>
-          </td>
-          
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <!-- Modal para Registrar y Editar Proveedores -->
-  <div class="modal fade" tabindex="-1" [ngClass]="{ 'show': modalVisible }" *ngIf="modalVisible" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ isEditMode ? 'Editar Proveedor' : 'Registrar Proveedor' }}</h5>
-          <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="proveedorForm" (ngSubmit)="guardarProveedor()">
-            <div class="mb-3">
-              <label for="empresa" class="form-label">Empresa:</label>
-              <input id="empresa" class="form-control" formControlName="empresa" required>
-            </div>
-  
-            <div class="mb-3">
-              <label for="representante" class="form-label">Representante:</label>
-              <input id="representante" class="form-control" formControlName="representante" required>
-            </div>
-  
-            <div class="mb-3">
-              <label for="telefono" class="form-label">Teléfono:</label>
-              <input id="telefono" class="form-control" formControlName="telefono" required>
-            </div>
-  
-            <div class="mb-3">
-              <label for="correo" class="form-label">Correo:</label>
-              <input id="correo" class="form-control" formControlName="correo" required type="email">
-            </div>
-  
-            <button type="submit" class="btn btn-primary" [disabled]="proveedorForm.invalid">{{ isEditMode ? 'Actualizar' : 'Registrar' }}</button>
-          </form>
-        </div>
+  <h2>Lista de Proveedores</h2>
+
+  <!-- Botón para abrir el modal de registro -->
+  <button class="btn btn-primary mb-3" (click)="abrirModalRegistro()">Registrar Proveedor</button>
+
+  <!-- Tabla de proveedores -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>RUC</th>
+        <th>Empresa</th>
+        <th>Representante</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let proveedor of proveedores">
+        <td>{{ proveedor.id }}</td>
+        <td>{{ proveedor.ruc }}</td>
+        <td>{{ proveedor.empresa }}</td>
+        <td>{{ proveedor.representante }}</td>
+        <td>{{ proveedor.telefono }}</td>
+        <td>{{ proveedor.correo }}</td>
+        <td>
+          <span [class.text-success]="proveedor.estado" [class.text-danger]="!proveedor.estado">
+            {{ proveedor.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-secondary btn-sm me-1" (click)="abrirModalEditar(proveedor)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarProveedor(proveedor.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal para Registrar y Editar Proveedores -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="modalVisible" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditMode ? 'Editar Proveedor' : 'Registrar Proveedor' }}</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="proveedorForm" (ngSubmit)="guardarProveedor()">
+          <div class="mb-3">
+            <label for="ruc" class="form-label">RUC:</label>
+            <input id="ruc" class="form-control" formControlName="ruc" required maxlength="11">
+          </div>
+
+          <div class="mb-3">
+            <label for="empresa" class="form-label">Empresa:</label>
+            <input id="empresa" class="form-control" formControlName="empresa" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="representante" class="form-label">Representante:</label>
+            <input id="representante" class="form-control" formControlName="representante" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono:</label>
+            <input id="telefono" class="form-control" formControlName="telefono" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo:</label>
+            <input id="correo" class="form-control" formControlName="correo" required type="email">
+          </div>
+
+          <div class="form-check mb-3">
+            <input id="estado" class="form-check-input" type="checkbox" formControlName="estado">
+            <label for="estado" class="form-check-label">Activo</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="proveedorForm.invalid">
+            {{ isEditMode ? 'Actualizar' : 'Registrar' }}
+          </button>
+        </form>
       </div>
     </div>
   </div>
-  
-  <!-- Overlay para bloquear el fondo cuando el modal está visible -->
-  <div class="overlay" *ngIf="modalVisible"></div>
-  
+</div>
