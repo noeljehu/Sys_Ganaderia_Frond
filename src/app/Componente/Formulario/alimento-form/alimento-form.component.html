@@ -1,88 +1,82 @@
-<div class="container mt-4">
-  <h2>Gestión de Alimentos</h2>
-  <button class="btn btn-primary mb-3" (click)="abrirModal()">Registrar Alimento</button>
+<div class="container">
+  <h1>Alimentos</h1>
 
-  <table class="table table-bordered table-striped">
-    <thead class="table-dark">
+  <!-- Botón para agregar un nuevo alimento -->
+  <button class="btn btn-success mb-3" (click)="abrirModal()">Agregar Alimento</button>
+
+  <!-- Tabla de alimentos -->
+  <table class="table">
+    <thead>
       <tr>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Cantidad</th>
-        <th>Unidad</th>
-        <th>Precio</th>
-        <th>Proveedor</th>
-        <th>Observaciones</th>
-        <th>Acciones</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Unidad</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Proveedor</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let alimento of alimentos">
-        <td>{{ alimento.codigoAlimento }}</td>
         <td>{{ alimento.nombre }}</td>
         <td>{{ alimento.tipo }}</td>
         <td>{{ alimento.cantidad }}</td>
         <td>{{ alimento.unidadMedida }}</td>
-        <td>S/. {{ alimento.precioPorUnidad }}</td>
+        <td>{{ alimento.precioPorUnidad | currency }}</td>
         <td>{{ alimento.proveedor }}</td>
-        <td>{{ alimento.observaciones }}</td>
         <td>
-          <button class="btn btn-sm btn-warning me-2" (click)="abrirModal(alimento)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="eliminarAlimento(alimento.id)">Eliminar</button>
+          <button class="btn btn-info" (click)="obtenerAlimentoPorId(alimento.id)">Ver Detalles</button>
+          <button class="btn btn-warning" (click)="abrirModal(alimento)">Editar</button>
+          <button class="btn btn-danger" (click)="eliminarAlimento(alimento.id)">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
-</div>
 
-<!-- Modal -->
-<div class="modal" id="alimentoModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form [formGroup]="alimentoForm" (ngSubmit)="guardarAlimento()">
+  <!-- Modal de creación y edición de alimentos -->
+  <div class="modal fade" id="alimentoModal" tabindex="-1" aria-labelledby="alimentoModalLabel" aria-hidden="true" [hidden]="!modalIsOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">
-            {{ currentAlimento ? 'Editar Alimento' : 'Registrar Alimento' }}
-          </h5>
-          <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+          <h5 class="modal-title" id="alimentoModalLabel">{{ selectedAlimento.id ? 'Editar' : 'Agregar' }} Alimento</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal()"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3" *ngFor="let field of ['nombre', 'tipo', 'unidadMedida']">
-            <label [for]="field" class="form-label">{{ field | titlecase }}</label>
-            <input [id]="field" type="text" class="form-control" [formControlName]="field" />
-          </div>
-          <div class="mb-3">
-            <label for="proveedor" class="form-label">Proveedor</label>
-            <select id="proveedor" class="form-select" formControlName="proveedor">
-              <option value="" disabled selected>Seleccione un proveedor</option>
-              <option *ngFor="let prov of proveedores" [value]="prov.empresa">  <!-- Usamos el nombre del proveedor -->
-                {{ prov.empresa }}  <!-- Se muestra el nombre del proveedor -->
-              </option>
-            </select>
-          </div>
-          
-          <div class="mb-3">
-            <label for="cantidad" class="form-label">Cantidad</label>
-            <input id="cantidad" type="number" class="form-control" formControlName="cantidad" />
-          </div>
-
-          <div class="mb-3">
-            <label for="precioPorUnidad" class="form-label">Precio por unidad</label>
-            <input id="precioPorUnidad" type="number" class="form-control" formControlName="precioPorUnidad" />
-          </div>
-
-          <div class="mb-3">
-            <label for="observaciones" class="form-label">Observaciones</label>
-            <textarea id="observaciones" class="form-control" formControlName="observaciones"></textarea>
-          </div>
+          <form (ngSubmit)="guardarAlimento(selectedAlimento)">
+            <!-- Campos del formulario -->
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" [(ngModel)]="selectedAlimento.nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="tipo" class="form-label">Tipo</label>
+              <input type="text" class="form-control" id="tipo" [(ngModel)]="selectedAlimento.tipo" name="tipo" required>
+            </div>
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad</label>
+              <input type="number" class="form-control" id="cantidad" [(ngModel)]="selectedAlimento.cantidad" name="cantidad" required>
+            </div>
+            <div class="mb-3">
+              <label for="unidadMedida" class="form-label">Unidad de Medida</label>
+              <input type="text" class="form-control" id="unidadMedida" [(ngModel)]="selectedAlimento.unidadMedida" name="unidadMedida" required>
+            </div>
+            <div class="mb-3">
+              <label for="precio" class="form-label">Precio</label>
+              <input type="number" class="form-control" id="precio" [(ngModel)]="selectedAlimento.precioPorUnidad" name="precio" required>
+            </div>
+            <div class="mb-3">
+              <label for="proveedor" class="form-label">Proveedor</label>
+              <input type="text" class="form-control" id="proveedor" [(ngModel)]="selectedAlimento.proveedor" name="proveedor" required>
+            </div>
+            <div class="mb-3">
+              <label for="observaciones" class="form-label">Observaciones</label>
+              <input type="text" class="form-control" id="observaciones" [(ngModel)]="selectedAlimento.observaciones" name="observaciones">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-success">
-            {{ currentAlimento ? 'Actualizar' : 'Guardar' }}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

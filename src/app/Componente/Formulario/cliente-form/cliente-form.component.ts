@@ -1,22 +1,23 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Cliente } from '../../Modelo/Cliente';
 import { ClienteService } from '../../servicios/cliente.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-cliente-form',
   standalone: true,
-  imports: [ CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cliente-form.component.html',
   styleUrls: ['./cliente-form.component.css'],
 })
-export class ClienteFormComponent implements OnInit {
+export class ClienteFormComponent implements OnInit, AfterViewInit {
+  nombreBuscado: string = '';
   clientes: Cliente[] = [];
   cliente: Cliente = {
-    idCliente: 0,
-    CodigoCliente: '',
     nombre: '',
     apellido: '',
     tipoDocumento: '',
@@ -25,93 +26,160 @@ export class ClienteFormComponent implements OnInit {
     correo: '',
     direccion: '',
   };
+  tiposDeDocumento: string[] = ['DNI', 'RUC', 'Pasaporte', 'Carnet de Extranjería'];
 
-  // Referencia del modal
-  @ViewChild('clienteModal', { static: false }) clienteModal: ElementRef | undefined;
+  private modalInstance: any;
 
   constructor(private clienteService: ClienteService) {}
+
+  ngAfterViewInit(): void {
+    // Inicializar la instancia del modal después de que la vista esté completamente cargada
+    this.modalInstance = new bootstrap.Modal(document.getElementById('clienteModal'));
+  }
 
   ngOnInit(): void {
     this.obtenerClientes();
   }
 
-  // Obtener todos los clientes
   obtenerClientes(): void {
     this.clienteService.obtenerClientes().subscribe((data) => {
       this.clientes = data;
     });
   }
 
-  // Crear un nuevo cliente
+  buscarPorNombre(): void {
+    if (this.nombreBuscado) {
+      this.clientes = this.clientes.filter(cliente =>
+        cliente.nombre.toLowerCase().includes(this.nombreBuscado.toLowerCase())
+      );
+    } else {
+      this.obtenerClientes();
+    }
+  }
+
+  // Crear cliente con confirmación
   crearCliente(): void {
-    console.log(this.cliente);
-    this.clienteService.crearCliente(this.cliente).subscribe((nuevoCliente) => {
-      this.clientes.push(nuevoCliente);
-      this.cerrarModal(); // Cerrar modal después de crear el cliente
-      this.resetCliente(); // Limpiar formulario
-    });
-  }
-
-  // Actualizar un cliente
-  actualizarCliente(id: number): void {
-    this.clienteService.actualizarCliente(id, this.cliente).subscribe((clienteActualizado) => {
-      const index = this.clientes.findIndex((cli) => cli.idCliente === id);
-      if (index !== -1) {
-        this.clientes[index] = clienteActualizado;
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres crear este cliente?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, crear',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        delete this.cliente.idCliente;
+        delete this.cliente.CodigoCliente;
+        this.clienteService.crearCliente(this.cliente).subscribe({
+          next: (nuevoCliente) => {
+            this.clientes.push(nuevoCliente);
+            this.cerrarModal();
+            this.resetCliente();
+            // SweetAlert de éxito
+            Swal.fire({
+              icon: 'success',
+              title: 'Cliente creado exitosamente',
+              text: 'El cliente ha sido creado con éxito.',
+            });
+          },
+          error: (err) => {
+            console.error('Error al crear cliente: ', err);
+            // SweetAlert de error
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un problema al crear el cliente.',
+            });
+          },
+        });
       }
-      this.cerrarModal(); // Cerrar modal después de actualizar
     });
   }
 
-  // Eliminar un cliente
+  // Actualizar cliente con confirmación
+  actualizarCliente(id: number): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres actualizar este cliente?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.clienteService.actualizarCliente(id, this.cliente).subscribe((clienteActualizado) => {
+          const index = this.clientes.findIndex(c => c.idCliente === id);
+          if (index !== -1) this.clientes[index] = clienteActualizado;
+          this.cerrarModal();
+          // SweetAlert de éxito
+          Swal.fire({
+            icon: 'success',
+            title: 'Cliente actualizado exitosamente',
+            text: 'El cliente ha sido actualizado con éxito.',
+          });
+        });
+      }
+    });
+  }
+
+  // Eliminar cliente con confirmación
   eliminarCliente(id: number): void {
-    this.clienteService.eliminarCliente(id).subscribe(() => {
-      this.clientes = this.clientes.filter((cli) => cli.idCliente !== id);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres eliminar este cliente?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.clienteService.eliminarCliente(id).subscribe(() => {
+          this.clientes = this.clientes.filter(c => c.idCliente !== id);
+          // SweetAlert de éxito
+          Swal.fire({
+            icon: 'success',
+            title: 'Cliente eliminado',
+            text: 'El cliente ha sido eliminado correctamente.',
+          });
+        });
+      }
     });
   }
 
-  // Obtener un cliente por ID
   obtenerCliente(id: number): void {
     this.clienteService.obtenerClientePorId(id).subscribe((data) => {
       this.cliente = data;
-      this.abrirModal(); // Abrir modal cuando se carga un cliente para editar
+      this.abrirModal();
     });
   }
 
-  // Abrir el modal
   abrirModal(): void {
-    const modalElement = this.clienteModal?.nativeElement;
-    if (!modalElement) {
-      console.error('Modal element is undefined');
-      return;
+    if (this.cliente.idCliente === 0) {
+      // Si el cliente no tiene un ID, reinicia los datos del cliente
+      this.resetCliente();
     }
-    const modal = new bootstrap.Modal(modalElement);
-    modal.show();
+    if (this.modalInstance) {
+      this.modalInstance.show();
+    }
   }
+  
 
-  // Cerrar el modal
   cerrarModal(): void {
-    const modalElement = this.clienteModal?.nativeElement;
-    if (!modalElement) {
-      console.error('Modal element is undefined');
-      return;
+    if (this.modalInstance) {
+      this.modalInstance.hide();
     }
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
   }
 
-  // Limpiar el formulario
   resetCliente(): void {
     this.cliente = {
       idCliente: 0,
-      CodigoCliente: '',
       nombre: '',
       apellido: '',
       tipoDocumento: '',
       numeroDocumento: '',
       telefono: '',
       correo: '',
-      direccion: '',
+      direccion: ''
     };
   }
 }

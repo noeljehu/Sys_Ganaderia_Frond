@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Alimento } from '../Modelo/Alimento';
 
 @Injectable({
@@ -8,52 +9,64 @@ import { Alimento } from '../Modelo/Alimento';
 })
 export class AlimentoService {
 
-  private apiUrl = `http://localhost:9000/aa`; // ← corregido
+  private apiUrl = 'http://localhost:9000/api/alimentos'; // URL base para los alimentos
 
   constructor(private http: HttpClient) { }
 
   // Obtener todos los alimentos
-  getAlimentos(): Observable<Alimento[]> {
-    return this.http.get<Alimento[]>(this.apiUrl);
+  obtenerTodosLosAlimentos(): Observable<Alimento[]> {
+    return this.http.get<Alimento[]>(this.apiUrl).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Obtener un alimento por ID
-  getAlimentoById(id: number): Observable<Alimento> {
-    return this.http.get<Alimento>(`${this.apiUrl}/${id}`);
+  obtenerAlimentoPorId(id: number): Observable<Alimento> {
+    return this.http.get<Alimento>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Guardar un nuevo alimento
-  guardarAlimento(alimento: Alimento, cantidad: number, unidadMedida: string): Observable<Alimento> {
-    const params = new HttpParams()
-      .set('cantidad', cantidad.toString())
-      .set('unidadMedida', unidadMedida);
-    return this.http.post<Alimento>(this.apiUrl, alimento, { params });
+  guardarAlimento(alimento: Alimento): Observable<Alimento> {
+    return this.http.post<Alimento>(this.apiUrl, alimento).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Actualizar un alimento
   actualizarAlimento(id: number, alimento: Alimento): Observable<Alimento> {
-    return this.http.put<Alimento>(`${this.apiUrl}/${id}`, alimento);
+    return this.http.put<Alimento>(`${this.apiUrl}/${id}`, alimento).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Eliminar un alimento
   eliminarAlimento(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  // Agregar stock por nombre
+  // Actualizar stock de un alimento por ID
+  actualizarStock(id: number, cantidad: number, unidadMedida: string): Observable<Alimento> {
+    const url = `${this.apiUrl}/${id}/stock?cantidad=${cantidad}&unidadMedida=${unidadMedida}`;
+    return this.http.patch<Alimento>(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Agregar stock a un alimento por nombre
   agregarStockPorNombre(nombre: string, cantidad: number, unidadMedida: string): Observable<Alimento> {
-    const params = new HttpParams()
-      .set('nombre', nombre)
-      .set('cantidad', cantidad.toString())
-      .set('unidadMedida', unidadMedida);
-    return this.http.patch<Alimento>(`${this.apiUrl}/agregar-stock`, {}, { params });
+    const url = `${this.apiUrl}/agregarStock?nombre=${nombre}&cantidad=${cantidad}&unidadMedida=${unidadMedida}`;
+    return this.http.patch<Alimento>(url, {}).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  // Actualizar stock por ID
-  actualizarStockPorId(id: number, cantidad: number, unidadMedida: string): Observable<Alimento> {
-    const params = new HttpParams()
-      .set('cantidad', cantidad.toString())
-      .set('unidadMedida', unidadMedida);
-    return this.http.patch<Alimento>(`${this.apiUrl}/${id}/stock`, {}, { params });
+  // Método para manejar los errores
+  private handleError(error: any): Observable<never> {
+    console.error('Ocurrió un error: ', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud.'));
   }
 }

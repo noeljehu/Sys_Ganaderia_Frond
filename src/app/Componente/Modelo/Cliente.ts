@@ -1,6 +1,6 @@
 export interface Cliente {
-  idCliente: number;
-  CodigoCliente: string;
+  idCliente?: number;
+  CodigoCliente?: string;
   nombre: string;
   apellido: string;
   tipoDocumento: string;
@@ -8,4 +8,5 @@ export interface Cliente {
   telefono: string;
   correo: string;
   direccion: string;
+  fechaRegistro?: string;
 }
